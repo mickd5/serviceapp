@@ -1690,10 +1690,19 @@ static PyMethodDef serviceappMethods[] = {
 	 {NULL,NULL,0,NULL}
 };
 
+static struct PyModuleDef serviceapp = {
+  PyModuleDef_HEAD_INIT,
+  "serviceapp",
+  "serviceapp module",
+  -1,
+  serviceappMethods
+};
+
 PyMODINIT_FUNC
-initserviceapp(void)
+PyInit_serviceapp(void)
 {
-	Py_InitModule("serviceapp", serviceappMethods);
+	PyObject *m;
+	m = PyModule_Create(&serviceapp);
 	g_GstPlayerOptionsServiceMP3 = new GstPlayerOptions();
 	g_GstPlayerOptionsServiceGst = new GstPlayerOptions();
 	g_GstPlayerOptionsUser = new GstPlayerOptions();
@@ -1709,4 +1718,8 @@ initserviceapp(void)
 
 	SSL_load_error_strings();
 	SSL_library_init();
+	
+	if (m == NULL)
+		return NULL;
+	return m;
 }
